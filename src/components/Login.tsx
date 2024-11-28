@@ -40,13 +40,16 @@ export const Login = () => {
 
             const data = await response.json();
             // Store the token in localStorage
+            console.log(JSON.stringify(data))
+
+            // Really not a great idea for security but it will do for now
             localStorage.setItem('token', data.token);
-            console.log(data.token);
+            localStorage.setItem('accountHolderId', data.accountHolderId);
 
             // You can redirect to another page or update the app state here
             console.log('Login successful!');
 
-            navigate('/accountHolder/1')
+            navigate('/accountHolder/'+data.accountHolderId);
         } catch (err) {
             // setError(err.message);
         } finally {
@@ -55,13 +58,12 @@ export const Login = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-md w-full space-y-8">
-                <div>
-                    <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                        Sign in to your account
-                    </h2>
-                </div>
+        <div className="min-h-screen flex items-center justify-center bg-red-500 py-12 px-4 sm:px-6 lg:px-8">
+                {/*<div>*/}
+                {/*    <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">*/}
+                {/*        Sign in to your account*/}
+                {/*    </h2>*/}
+                {/*</div>*/}
                 <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
                     <div className="rounded-md shadow-sm -space-y-px">
                         <div>
@@ -108,7 +110,6 @@ export const Login = () => {
                         </button>
                     </div>
                 </form>
-            </div>
         </div>
     );
 };

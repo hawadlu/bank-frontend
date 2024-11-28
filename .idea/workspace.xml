@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="78fd04cb-fab4-46f0-a1c4-6983a6435363" name="Changes" comment="" />
+    <list default="true" id="78fd04cb-fab4-46f0-a1c4-6983a6435363" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AccountHolderDetails.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AccountHolderDetails.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Login.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Login.tsx" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -34,7 +38,7 @@
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.2",
-    "ts.external.directory.path": "/Users/lukehawinkels/Desktop/Projects/TSB/tsb.technical.test/src/bank-frontend/node_modules/typescript/lib",
+    "ts.external.directory.path": "/Users/lukehawinkels/Desktop/Projects/TSB/bank-frontend/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -61,6 +65,7 @@
       <updated>1732758752838</updated>
       <workItem from="1732758754362" duration="591000" />
       <workItem from="1732759805125" duration="4547000" />
+      <workItem from="1732764482651" duration="13188000" />
     </task>
     <servers />
   </component>

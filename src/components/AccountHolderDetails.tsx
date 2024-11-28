@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -75,7 +75,7 @@ export const AccountHolderDetails = () => {
                 setHolderAccounts(response.data);
             }
         } catch (error) {
-            console.error('Error fetching account holder:', error);
+            console.error('Error fetching accounts:', error);
             // If we get a 401 or 403, redirect to login
             if (axios.isAxiosError(error) && (error.response?.status === 401 || error.response?.status === 403)) {
                 localStorage.removeItem('token');
@@ -83,49 +83,49 @@ export const AccountHolderDetails = () => {
             }
         }
     };
-
-    // const handleTransaction = async () => {
+    // const fetchTransactions = async () => {
     //     const token = localStorage.getItem('token');
     //     if (!token) {
+    //         // Redirect to login if no token exists
     //         navigate('/');
     //         return;
     //     }
     //
     //     try {
-    //         const response = await axios.post('/transaction', {
-    //             fromAccountId: 1,
-    //             toAccountId: 2,
-    //             amount: 10
-    //         }, {
+    //         const response = await axios.get(`/transaction/${id}/1`, {
     //             headers: {
     //                 'Authorization': `Bearer ${token}`
     //             }
     //         });
     //
-    //         return response.data;
+    //         if (response.data) {
+    //             setTransactions(response.data);
+    //         }
     //     } catch (error) {
-    //         console.error('Error creating transaction:', error);
+    //         console.error('Error fetching account transactions:', error);
+    //         // If we get a 401 or 403, redirect to login
     //         if (axios.isAxiosError(error) && (error.response?.status === 401 || error.response?.status === 403)) {
     //             localStorage.removeItem('token');
     //             navigate('/');
     //         }
-    //         throw error;
     //     }
-    // }
+    // };
 
     useEffect(() => {
         fetchAccountHolder();
         fetchAccounts();
-    }, [fetchAccountHolder, fetchAccounts(), id]); // Remove fetchAccountHolder from dependencies to avoid infinite loop
+        // fetchTransactions()
+    }, [fetchAccountHolder, fetchAccounts, id]); // Remove fetchAccountHolder from dependencies to avoid infinite loop
 
     return accountHolder ? (
         <div>
             <h2>Account Holder Details</h2>
             <p>{JSON.stringify(accountHolder)}</p>
 
-            <p>Transactions</p>
+            <p>Accounts</p>
             {holderAccounts?.map(acc => JSON.stringify(acc))}
-            <p>stuff</p>
+            <p>Transaction</p>
+            {transactions?.map(acc => JSON.stringify(acc))}
         </div>
     ) : (
         <p>Loading...</p>
