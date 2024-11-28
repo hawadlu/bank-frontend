@@ -1,5 +1,5 @@
 import {AccountDetails, ErrorState} from "../utility/types.ts";
-import {useState, ChangeEvent} from "react";
+import {useState, ChangeEvent, useMemo} from "react";
 import {useQuery, useQueryClient} from "@tanstack/react-query";
 import {checkAndGetToken} from "../utility/api.ts";
 import {useNavigate, useParams} from "react-router-dom";
@@ -40,6 +40,12 @@ export const Accounts = () => {
         },
         retry: false
     });
+
+    // Sort accounts using useMemo to avoid unnecessary re-sorting
+    const sortedAccounts = useMemo(() => {
+        if (!accounts) return [];
+        return [...accounts].sort((a, b) => a.accountNumber - b.accountNumber);
+    }, [accounts]);
 
     const handleCreateTransaction = async (accountOwnerId: string) => {
         // Reset any transaction errors
@@ -98,7 +104,7 @@ export const Accounts = () => {
         <div>
             <h3 className="text-xl font-bold mb-2">Accounts</h3>
             <div className="space-y-2">
-                {accounts && accounts.map(account => (
+                {sortedAccounts.map(account => (
                     <Account key={account.id} account={account} />
                 ))}
             </div>
@@ -113,9 +119,9 @@ export const Accounts = () => {
                                 className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                             >
                                 <option value="">Select account</option>
-                                {accounts && accounts.map(account => (
-                                    <option key={account.id} value={account.id}>
-                                        {account.id}
+                                {sortedAccounts.map(account => (
+                                    <option key={account.accountNumber} value={account.accountNumber}>
+                                        {account.accountNumber}
                                     </option>
                                 ))}
                             </select>
@@ -127,9 +133,9 @@ export const Accounts = () => {
                                 className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                             >
                                 <option value="">Select account</option>
-                                {accounts && accounts.map(account => (
-                                    <option key={account.id} value={account.id}>
-                                        {account.id}
+                                {sortedAccounts.map(account => (
+                                    <option key={account.accountNumber} value={account.accountNumber}>
+                                        {account.accountNumber}
                                     </option>
                                 ))}
                             </select>

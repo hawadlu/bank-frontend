@@ -58,7 +58,7 @@ export const Login = () => {
     };
 
     return (
-        <div className="min-h-screen flex-col items-center content-center justify-center bg-gray-400 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen flex-col items-center content-center justify-center bg-gray-300 py-12 px-4 sm:px-6 lg:px-8">
             <h1 className = "text-5xl justify-self-center">Welcome to TSB</h1>
                 <form className="mt-8 space-y-6 w-1/2 justify-self-center " onSubmit={handleSubmit}>
                     <div className="shadow-sm -space-y-px">

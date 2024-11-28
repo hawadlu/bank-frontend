@@ -60,15 +60,15 @@ export const AccountHolderDetails = () => {
     }
 
     return (
-        <div className="p-4">
-            <button className="bg-gray-400" title={'Logout'} onClick={() => navigate('/')}>Logout</button>
+        <div className="p-4 bg-gray-300 min-h-screen">
             <h2 className="text-2xl font-bold mb-4">Account Holder Details</h2>
             {accountDetails && (
                 <div className="mb-4">
                     <p>Name: {accountDetails.name}</p>
                 </div>
             )}
-            <Accounts />
+            <Accounts/>
+            <button onClick={() => navigate('/')}><p className="text-red-500">Logout</p></button>
         </div>
     );
 };
