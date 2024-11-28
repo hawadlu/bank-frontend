@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 type AccountHolderDetails = {
@@ -24,72 +24,79 @@ type Transaction = {
 
 export const AccountHolderDetails = () => {
     const { id } = useParams();
+    const navigate = useNavigate();
     const [accountHolder, setAccountHolder] = useState<AccountHolderDetails | undefined>(undefined);
     const [holderAccounts, setHolderAccounts] = useState<AccountDetails[] | undefined>(undefined);
     const [transactions, setTransactions] = useState<Transaction[] | undefined>(undefined);
 
+    const fetchAccountHolder = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            // Redirect to login if no token exists
+            navigate('/');
+            return;
+        }
+
+        try {
+            const response = await axios.get(`/accountHolder/${id}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (response.data) {
+                setAccountHolder(response.data);
+            }
+        } catch (error) {
+            console.error('Error fetching account holder:', error);
+            // If we get a 401 or 403, redirect to login
+            if (axios.isAxiosError(error) && (error.response?.status === 401 || error.response?.status === 403)) {
+                localStorage.removeItem('token');
+                navigate('/');
+            }
+        }
+    };
+
+    // const handleTransaction = async () => {
+    //     const token = localStorage.getItem('token');
+    //     if (!token) {
+    //         navigate('/');
+    //         return;
+    //     }
+    //
+    //     try {
+    //         const response = await axios.post('/transaction', {
+    //             fromAccountId: 1,
+    //             toAccountId: 2,
+    //             amount: 10
+    //         }, {
+    //             headers: {
+    //                 'Authorization': `Bearer ${token}`
+    //             }
+    //         });
+    //
+    //         return response.data;
+    //     } catch (error) {
+    //         console.error('Error creating transaction:', error);
+    //         if (axios.isAxiosError(error) && (error.response?.status === 401 || error.response?.status === 403)) {
+    //             localStorage.removeItem('token');
+    //             navigate('/');
+    //         }
+    //         throw error;
+    //     }
+    // }
+
     useEffect(() => {
-        const fetchAccountHolder = async () => {
-            try {
-                return await axios.get(`/accountHolder/${id}`);
-            } catch (error) {
-                console.error('Error fetching account holder:', error);
-            }
-        };
-
-        const fetchAccounts = async () => {
-            console.log('Fetching accounts:', id);
-            try {
-                return await axios.get(`/account/${id}`);
-            } catch (error) {
-                console.error('Error fetching accounts:', error);
-            }
-        };
-
-        const fetchTransactions = async () => {
-            console.log('Fetching transaction:', id);
-            try {
-                return await axios.get(`/transaction/${id}`);
-            } catch (error) {
-                console.error('Error fetching transactions:', error);
-            }
-        };
-
-
-        fetchAccountHolder().then(response => {
-            if (!response) return
-            setAccountHolder(response.data)
-        });
-
-        fetchAccounts().then(response => {
-            if (!response) return
-            setHolderAccounts(response.data)
-        });
-
-        fetchTransactions().then(response => {
-            if (!response) return
-            console.log('Transaction data: ' + JSON.stringify(response))
-            setTransactions(response.data)
-        });
-    }, [id]);
+        fetchAccountHolder();
+    }, [fetchAccountHolder, id]); // Remove fetchAccountHolder from dependencies to avoid infinite loop
 
     return accountHolder ? (
         <div>
             <h2>Account Holder Details</h2>
-            <p>Name: {accountHolder.name}</p>
-            <p>Email: {accountHolder.email}</p>
+            <p>{JSON.stringify(accountHolder)}</p>
 
-            {
-                holderAccounts?.map(account => {
-                    return JSON.stringify(account)
-                })
-            }
-
-            {
-                transactions?.map(account => {
-                    return JSON.stringify(account)
-                })
-            }
+            <p>Transactions</p>
+            <p>stuff</p>
         </div>
     ) : (
         <p>Loading...</p>
