@@ -11,8 +11,8 @@ export const Login = () => {
 
     const navigate = useNavigate();
 
-    const handleInputChange = (e: { target: { name: any; value: any; }; }) => {
-        const { name, value } = e.target;
+    const handleInputChange = (e: { target: { name: string; value: string; }; }) => {
+        const { name, value } = e.target
         setCredentials(prev => ({
             ...prev,
             [name]: value
@@ -50,8 +50,8 @@ export const Login = () => {
             console.log('Login successful!');
 
             navigate('/accountHolder/'+data.accountHolderId);
-        } catch (err) {
-            // setError(err.message);
+        } catch {
+            setError('Something went wrong');
         } finally {
             setLoading(false);
         }

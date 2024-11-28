@@ -1,4 +1,8 @@
-const Modal = ({ isOpen, onClose, title, children }) => {
+import React from "react";
+
+const Modal = (
+    { isOpen, onClose, title, children }:
+   {isOpen: boolean, onClose: () => void, title: string, children: React.ReactElement}) => {
     if (!isOpen) return null;
 
     const handleOverlayClick = (e) => {

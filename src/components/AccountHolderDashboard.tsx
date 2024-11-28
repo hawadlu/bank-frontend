@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import {AccountDetails, AccountHolderDashboard, ErrorState, LoadingState, Transaction} from "./types.ts";
+import {AccountHolderDashboard, ErrorState} from "../utility/types.ts";
 import {Accounts} from "./Accounts.tsx";
-import {checkAndGetToken} from "./api.ts";
-import {QueryClient, QueryClientProvider, useQuery} from "@tanstack/react-query";
+import {checkAndGetToken} from "../utility/api.ts";
+import {useQuery} from "@tanstack/react-query";
 
 export const AccountHolderDetails = () => {
     const { id } = useParams();
@@ -29,6 +28,7 @@ export const AccountHolderDetails = () => {
             });
 
             if (!response.ok) {
+                setErrors({accountHolder: "Failed to fetch accountHolder"});
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
@@ -51,24 +51,17 @@ export const AccountHolderDetails = () => {
         retry: false
     });
 
-    const handleAuthError = (error: any) => {
-        if (axios.isAxiosError(error) && (error.response?.status === 401 || error.response?.status === 403)) {
-            localStorage.removeItem('token');
-            navigate('/');
-        }
-    };
-
-    if (errors.accountHolder || errors.accounts) {
+    if (errors.accountHolder) {
         return (
             <div className="text-red-500">
                 {errors.accountHolder && <p>{errors.accountHolder}</p>}
-                {errors.accounts && <p>{errors.accounts}</p>}
             </div>
         );
     }
 
     return (
         <div className="p-4">
+            <button className="bg-gray-400" title={'Logout'} onClick={() => navigate('/')}>Logout</button>
             <h2 className="text-2xl font-bold mb-4">Account Holder Details</h2>
             {accountDetails && (
                 <div className="mb-4">

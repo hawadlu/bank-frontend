@@ -1,11 +1,8 @@
-import React, {Component, useState} from 'react';
 import './App.css';
-// import Home from './Home';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
-import {AccountHolderDetails, Login} from "./components";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
-// import ClientList from './ClientList';
-// import ClientEdit from "./ClientEdit";
+import {Login} from "./components/Login.tsx";
+import {AccountHolderDetails} from "./components/AccountHolderDashboard.tsx";
 
 const App = () => {
     const queryClient = new QueryClient();

@@ -1,7 +1,7 @@
-import {AccountDetails, Transaction} from "./types.ts";
-import React, {useState, ChangeEvent} from "react";
+import {AccountDetails, ErrorState} from "../utility/types.ts";
+import {useState, ChangeEvent} from "react";
 import {useQuery, useQueryClient} from "@tanstack/react-query";
-import {checkAndGetToken} from "./api.ts";
+import {checkAndGetToken} from "../utility/api.ts";
 import {useNavigate, useParams} from "react-router-dom";
 import {Account} from "./Account.tsx";
 import axios from "axios";
@@ -12,6 +12,7 @@ export const Accounts = () => {
     const [fromAccountId, setFromAccountId] = useState<number>();
     const [toAccountId, setToAccountId] = useState<number>();
     const [amount, setAmount] = useState<number>();
+    const [errors, setErrors] = useState<ErrorState>({});
 
     const queryClient = useQueryClient();
 
@@ -31,16 +32,19 @@ export const Accounts = () => {
             });
 
             if (!response.ok) {
+                setErrors({accounts: "Error fetching accounts..."});
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            // Simply use response.json() instead of manual stream reading
-            return response.json() as Promise<AccountDetails[]>;
+            return await response.json() as Promise<AccountDetails[]>;
         },
         retry: false
     });
 
     const handleCreateTransaction = async (accountOwnerId: string) => {
+        // Reset any transaction errors
+        setErrors({})
+
         const token = checkAndGetToken(navigate);
         if (!token || !fromAccountId || !toAccountId || !amount) return;
 
@@ -65,8 +69,8 @@ export const Accounts = () => {
 
             console.log('Got response:', response);
             await queryClient.resetQueries();
-        } catch (error) {
-            console.error('Transaction failed:', error);
+        } catch {
+            setErrors({transactions: "Error creating transaction..."});
         }
     };
 
@@ -82,6 +86,14 @@ export const Accounts = () => {
         setAmount(Number(e.target.value));
     };
 
+    if (errors.accountHolder) {
+        return (
+            <div className="text-red-500">
+                {errors.accountHolder && <p>{errors.accountHolder}</p>}
+            </div>
+        );
+    }
+
     return (
         <div>
             <h3 className="text-xl font-bold mb-2">Accounts</h3>
@@ -92,50 +104,57 @@ export const Accounts = () => {
             </div>
             <div className="mt-8">
                 <h3 className="text-xl font-bold mb-2">Make a transaction</h3>
-                <div className="space-y-4">
-                    <div>
-                        <p>From</p>
-                        <select
-                            onChange={handleFromAccountChange}
-                            className="mt-1 block w-full"
+                <div className="max-w-6xl mx-auto p-6">
+                    <div className="flex flex-col lg:flex-row lg:items-end lg:space-x-6 space-y-6 lg:space-y-0">
+                        <div className="flex-1 space-y-2">
+                            <p className="text-sm font-medium text-gray-700">From</p>
+                            <select
+                                onChange={handleFromAccountChange}
+                                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                            >
+                                <option value="">Select account</option>
+                                {accounts && accounts.map(account => (
+                                    <option key={account.id} value={account.id}>
+                                        {account.id}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="flex-1 space-y-2">
+                            <p className="text-sm font-medium text-gray-700">To</p>
+                            <select
+                                onChange={handleToAccountChange}
+                                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                            >
+                                <option value="">Select account</option>
+                                {accounts && accounts.map(account => (
+                                    <option key={account.id} value={account.id}>
+                                        {account.id}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="flex-1 space-y-2">
+                            <p className="text-sm font-medium text-gray-700">Amount</p>
+                            <input
+                                type="number"
+                                onChange={handleAmountChange}
+                                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                            />
+                        </div>
+                        <button
+                            onClick={() => handleCreateTransaction(id!)}
+                            className="w-full lg:w-auto px-6 py-2 bg-blue-600 text-white text-sm font-medium rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200"
                         >
-                            <option value="">Select account</option>
-                            {accounts && accounts.map(account => (
-                                <option key={account.id} value={account.id}>
-                                    {account.id}
-                                </option>
-                            ))}
-                        </select>
+                            Submit
+                        </button>
                     </div>
-                    <div>
-                        <p>To</p>
-                        <select
-                            onChange={handleToAccountChange}
-                            className="mt-1 block w-full"
-                        >
-                            <option value="">Select account</option>
-                            {accounts && accounts.map(account => (
-                                <option key={account.id} value={account.id}>
-                                    {account.id}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                    <div>
-                        <p>Amount</p>
-                        <input
-                            type="number"
-                            onChange={handleAmountChange}
-                            className="mt-1 block w-full"
-                        />
-                    </div>
-                    <button
-                        onClick={() => handleCreateTransaction(id!)}
-                        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                    >
-                        Submit
-                    </button>
                 </div>
+                {errors.transactions && (
+                    <div className="text-red-500">
+                        {errors.transactions && <p>{errors.transactions}</p>}
+                    </div>
+                )}
             </div>
         </div>
     );

@@ -1,10 +1,10 @@
 import {useNavigate, useParams} from "react-router-dom";
-import React, {useEffect, useState} from "react";
-import {ErrorState, LoadingState, Transaction} from "./types.ts";
+import {useEffect, useState} from "react";
+import {ErrorState, LoadingState, Transaction} from "../utility/types.ts";
 import axios from "axios";
-import {checkAndGetToken} from "./api.ts";
+import {checkAndGetToken} from "../utility/api.ts";
 
-export const RenderTransaction = ({accountId}: {accountId: number}) => {
+export const TransactionList = ({accountId}: {accountId: number}) => {
     const { id } = useParams();
     const navigate = useNavigate();
 
