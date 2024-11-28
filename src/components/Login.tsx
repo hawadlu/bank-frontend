@@ -58,35 +58,31 @@ export const Login = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-red-500 py-12 px-4 sm:px-6 lg:px-8">
-                {/*<div>*/}
-                {/*    <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">*/}
-                {/*        Sign in to your account*/}
-                {/*    </h2>*/}
-                {/*</div>*/}
-                <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-                    <div className="rounded-md shadow-sm -space-y-px">
-                        <div>
+        <div className="min-h-screen flex-col items-center content-center justify-center bg-gray-400 py-12 px-4 sm:px-6 lg:px-8">
+            <h1 className = "text-5xl justify-self-center">Welcome to TSB</h1>
+                <form className="mt-8 space-y-6 w-1/2 justify-self-center " onSubmit={handleSubmit}>
+                    <div className="shadow-sm -space-y-px">
+                        <div className="flex items-center justify-between">
                             <label htmlFor="username" className="sr-only">Username</label>
                             <input
                                 id="username"
                                 name="username"
                                 type="text"
                                 required
-                                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                className="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                                 placeholder="Username"
                                 value={credentials.username}
                                 onChange={handleInputChange}
                             />
                         </div>
-                        <div>
+                        <div className="pt-4 flex items-center justify-betweeng">
                             <label htmlFor="password" className="sr-only">Password</label>
                             <input
                                 id="password"
                                 name="password"
                                 type="password"
                                 required
-                                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                className="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                                 placeholder="Password"
                                 value={credentials.password}
                                 onChange={handleInputChange}

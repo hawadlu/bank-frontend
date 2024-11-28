@@ -1,2 +1,2 @@
 export {Login} from './Login'
-export {AccountHolderDetails} from './AccountHolderDetails'
+export {AccountHolderDetails} from './AccountHolderDashboard.tsx'
